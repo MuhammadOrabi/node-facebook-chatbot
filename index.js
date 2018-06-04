@@ -22,7 +22,7 @@ app.get('/webhock', function (req, res) {
 });
 
 app.post('/webhock', function(req, res) {
-    let messaging_events = req.body.entry[0].messaging_events;
+    let messaging_events = req.body.entry[0].messaging;
     messaging_events.forEach(event => {
         let sender = event.sender.id;
         if (event.message && event.message.text) {
