@@ -83,18 +83,24 @@ function sendButtonMessage(sender, text) {
 
 function sendImageMessage(sender) {
     let messageData = {
-        "attachment": {
-            "type": "template",
-            "payload": {
-               "template_type": "media",
-               "elements": [
-                  {
-                     "media_type": "image",
-                     "url": "https://picsum.photos/200/300"
-                  }
-               ]
+        "attachment":{
+            "type":"template",
+            "payload":{
+              "template_type":"open_graph",
+              "elements":[
+                 {
+                  "url":"https://open.spotify.com/track/7GhIk7Il098yCjg4BQjzvb",
+                  "buttons":[
+                    {
+                      "type":"web_url",
+                      "url":"https://en.wikipedia.org/wiki/Rickrolling",
+                      "title":"View More"
+                    }              
+                  ]      
+                }
+              ]
             }
-        }
+          }
     };
 
     sendRequest(sender, messageData);    
