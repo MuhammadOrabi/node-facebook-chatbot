@@ -27,17 +27,107 @@ app.post('/webhock', function(req, res) {
         let sender = event.sender.id;
         if (event.message && event.message.text) {
             let text = event.message.text;
-            sendText(sender, 'Text echo: ' + text.substring(0, 100));
+            decideMessage(sender, text);            
+            // sendText(sender, 'Text echo: ' + text.substring(0, 100));
+        } else if (event.postback) {
+            let text = JSON.stringify(event.postback);
+            decideMessage(sender, text);
         }
     });
     res.sendStatus(200);
 });
 
+function decideMessage(sender, text1) {
+    let text = text1.toLowerCase();
+    if (text.includes('summer')) {
+        sendImageMessage(sender);
+    } else if (text.includes('winter')) {
+        sendGeniricMessage(sender);
+    } else {
+        sendText(sender, 'I like Fall');
+        sendButtonMessage(snder, 'what is your favorite season?');
+    }
+}
+
 function sendText(sender, text) {
     let messageData = {
         text: text
     };
+    sendRequest(sender, messageData);
+}
 
+function sendButtonMessage(sender, text) {
+    let messageData = {"attachment": {
+        "type":"template",
+        "payload":{
+          "template_type":"button",
+          "text": text,
+          "buttons":[
+            {
+              "type":"postback",
+              "title":"Summer",
+              "payload":"summer"              
+            },
+            {
+                "type":"postback",
+                "title":"Winter",
+                "payload":"winter"                
+            }
+          ]
+        }
+      }
+    };
+
+    sendRequest(sender, messageData);
+}
+
+function sendImageMessage(sender) {
+    let messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+               "template_type": "media",
+               "elements": [
+                  {
+                     "media_type": "<image>",
+                     "attachment_id": "https://picsum.photos/200/300"
+                  }
+               ]
+            }
+        }
+    };
+
+    sendRequest(sender, messageData);    
+}
+
+function sendGeniricMessage(sender) {
+    let messageData = {
+        "attachment":{
+            "type":"template",
+            "payload":{
+              "template_type":"generic",
+              "elements":[
+                 {
+                  "title":"Winter!",
+                  "image_url":"https://picsum.photos/200/300",
+                  "subtitle":"I Love Winter",
+                  "buttons":[
+                    {
+                      "type":"web_url",
+                      "url":"https://petersfancybrownhats.com",
+                      "title":"View Website"
+                    }            
+                  ]      
+                }
+              ]
+            }
+        }
+    };
+
+    sendRequest(sender, messageData);
+}
+
+function sendRequest(sender, messageData) {
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: { access_token: token },
