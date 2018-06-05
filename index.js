@@ -89,7 +89,7 @@ function sendImageMessage(sender) {
                "template_type": "media",
                "elements": [
                   {
-                     "media_type": "<image>",
+                     "media_type": "image",
                      "attachment_id": "https://picsum.photos/200/300"
                   }
                ]
