@@ -45,7 +45,7 @@ function decideMessage(sender, text1) {
         sendGeniricMessage(sender);
     } else {
         sendText(sender, 'I like Fall');
-        sendButtonMessage(snder, 'what is your favorite season?');
+        sendButtonMessage(sender, 'what is your favorite season?');
     }
 }
 
